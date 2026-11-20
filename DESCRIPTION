@@ -1,0 +1,20 @@
+Package: trainingmodels
+Title: Mathematical Models of Training Load and Training Response
+Version: 0.0.0.9000
+Authors@R: 
+    person("Jorge del Rosario", "Fernández Santos", , "jorgedelrosario.fernandez@uca.es", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0002-5047-2976"))
+Description: Implements mathematical models used in sport science to
+    describe training load and its relationship with training response,
+    including descriptors of daily training load and impulse-response
+    models.
+License: MIT + file LICENSE
+URL: https://github.com/JorgeDelro/trainingmodels,
+    https://jorgedelro.github.io/trainingmodels/
+BugReports: https://github.com/JorgeDelro/trainingmodels/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3

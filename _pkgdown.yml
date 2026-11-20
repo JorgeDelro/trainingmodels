@@ -1,0 +1,15 @@
+url: https://jorgedelro.github.io/trainingmodels/
+template:
+  bootstrap: 5
+
+# Reference index: empty until the first exported function is added.
+reference: []
+
+# Articles: one article per method (DECISIONS.md, D-006). pkgdown does not
+# accept an empty `contents` field, so uncomment this section when the first
+# vignette is added.
+# articles:
+# - title: Articles
+#   desc: Theory, computation and limitations of each method.
+#   contents:
+#   - <vignette-name>

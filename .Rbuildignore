@@ -1,0 +1,10 @@
+^LICENSE\.md$
+^CODE_OF_CONDUCT\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
+^bib$
+^DECISIONS\.md$
+^AI_USAGE\.md$
+^CONTRIBUTING\.md$

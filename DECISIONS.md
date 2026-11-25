@@ -25,6 +25,18 @@ reason. Approved entries are decided by the author.
   copied.
 - D-010 (2026-11-20) The `bib/` folder (copyrighted papers) is never
   committed.
+- D-011 (2026-11-24) Impulse-response functions implement both timing
+  conventions found in the literature, selected with the argument
+  `same_day_load`: "exclude" (sum to n-1; Busso & Chalencon 2023) and
+  "include" (Morton et al. 1990, Eqs. 4-5). Reason: the two forms are not
+  equivalent and both are in use; see MODELS.md, M-01.
+- D-012 (2026-11-24) The default is `same_day_load = "exclude"`. Every
+  fitted object stores and prints its convention, because gains fitted under
+  one convention are not comparable with the other.
+- D-013 (2026-11-24) MODELS.md is the model registry and single source of
+  truth for formulas, verification sources, reference values and literature
+  discrepancies. Its first version (entries M-01 to M-09) was approved by the
+  author on 2026-11-24.
 
 ## Proposed (architecture, awaiting author approval)
 - A-001 One daily-series class as the single entry point: validates input,
@@ -41,6 +53,10 @@ reason. Approved entries are decided by the author.
   R script of Busso & Chalencon (2023, Supplemental Digital Content 2) and
   from the dorem package; neither is a dependency.
 - A-008 dlnm and REDI as Suggests, from version 0.3.
+- A-009 All impulse-response models share one data format (daily load plus
+  performance on some days). Example datasets imitate published designs,
+  are simulated, and are labelled as simulated; a data-collection template
+  ships with the package.
 
 ## Pending (product and domain, author to decide)
 - P-001 Which outcome students will have for Banister (repeated performance
@@ -50,9 +66,8 @@ reason. Approved entries are decided by the author.
 - P-003 How students access the app (local R or hosted URL).
 - P-004 Language of the theory documentation and of the app interface.
 - P-005 Planned research use in the next six months (JOSS vs JOSE).
-- P-006 Accept Busso & Chalencon (2023) as verification source for the
-  Banister formula (sum to n-1), with Morton et al. (1990) only as citation
-  check.
+- P-006 Closed 2026-11-24: Morton et al. (1990) was read and uses a
+  different timing convention; resolved by D-011 and D-012.
 - P-007 Include the fitness-only model in the first version.
 - P-008 Every fit reports trivial comparators (mean, straight line).
 - P-009 Fit output foregrounds the response to a single session (curve,

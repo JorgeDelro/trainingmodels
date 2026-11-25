@@ -47,6 +47,9 @@
 <li>D-008 (2026-11-18) Code, documentation and commits in English.</li>
 <li>D-009 (2026-11-19) All package code is written from the verified formulas; third-party code is used only as an external reference for tests, never copied.</li>
 <li>D-010 (2026-11-20) The <code>bib/</code> folder (copyrighted papers) is never committed.</li>
+<li>D-011 (2026-11-24) Impulse-response functions implement both timing conventions found in the literature, selected with the argument <code>same_day_load</code>: “exclude” (sum to n-1; Busso &amp; Chalencon 2023) and “include” (Morton et al. 1990, Eqs. 4-5). Reason: the two forms are not equivalent and both are in use; see MODELS.md, M-01.</li>
+<li>D-012 (2026-11-24) The default is <code>same_day_load = "exclude"</code>. Every fitted object stores and prints its convention, because gains fitted under one convention are not comparable with the other.</li>
+<li>D-013 (2026-11-24) MODELS.md is the model registry and single source of truth for formulas, verification sources, reference values and literature discrepancies. Its first version (entries M-01 to M-09) was approved by the author on 2026-11-24.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="proposed-architecture-awaiting-author-approval">Proposed (architecture, awaiting author approval)<a class="anchor" aria-label="anchor" href="#proposed-architecture-awaiting-author-approval"></a></h2>
@@ -58,6 +61,7 @@
 <li>A-006 Model comparison with AICc and Akaike weights.</li>
 <li>A-007 Reference values for tests generated outside the package from the R script of Busso &amp; Chalencon (2023, Supplemental Digital Content 2) and from the dorem package; neither is a dependency.</li>
 <li>A-008 dlnm and REDI as Suggests, from version 0.3.</li>
+<li>A-009 All impulse-response models share one data format (daily load plus performance on some days). Example datasets imitate published designs, are simulated, and are labelled as simulated; a data-collection template ships with the package.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="pending-product-and-domain-author-to-decide">Pending (product and domain, author to decide)<a class="anchor" aria-label="anchor" href="#pending-product-and-domain-author-to-decide"></a></h2>
@@ -66,7 +70,7 @@
 <li>P-003 How students access the app (local R or hosted URL).</li>
 <li>P-004 Language of the theory documentation and of the app interface.</li>
 <li>P-005 Planned research use in the next six months (JOSS vs JOSE).</li>
-<li>P-006 Accept Busso &amp; Chalencon (2023) as verification source for the Banister formula (sum to n-1), with Morton et al. (1990) only as citation check.</li>
+<li>P-006 Closed 2026-11-24: Morton et al. (1990) was read and uses a different timing convention; resolved by D-011 and D-012.</li>
 <li>P-007 Include the fitness-only model in the first version.</li>
 <li>P-008 Every fit reports trivial comparators (mean, straight line).</li>
 <li>P-009 Fit output foregrounds the response to a single session (curve, t_n, t_g) over individual parameters.</li>

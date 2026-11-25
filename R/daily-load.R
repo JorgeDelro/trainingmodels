@@ -333,12 +333,12 @@ parse_dates <- function(x, name, date_format) {
     }
     x <- parsed
   }
-  year <- as.integer(format(x, "%Y"))
+  year <- as.POSIXlt(x)$year + 1900L
   bad <- which(year < 1900L | year > 2100L)[1L]
   if (!is.na(bad)) {
     stop(sprintf(
       "Column \"%s\": row %d gives the date %s, with a year outside 1900-2100. Check `date_format` (\"%%Y\" needs a four-digit year).",
-      name, bad, format(x[bad])
+      name, bad, iso_date(x[bad])
     ), call. = FALSE)
   }
   x
@@ -445,4 +445,11 @@ strip_daily_load <- function(x) {
   attr(x, "load_name") <- NULL
   class(x) <- "data.frame"
   x
+}
+
+# format() of a Date does not zero-pad years below 1000 on every platform
+# (glibc gives "26-04-03"), so the date is written from its parts.
+iso_date <- function(x) {
+  lt <- as.POSIXlt(x)
+  sprintf("%04d-%02d-%02d", lt$year + 1900L, lt$mon + 1L, lt$mday)
 }

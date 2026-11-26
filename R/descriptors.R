@@ -122,9 +122,9 @@ srpe_load <- function(rpe, duration) {
 #'   The attributes `window` and `same_day_load` record the arguments used.
 #'
 #' @references
-#' Carey DL, Blanch P, Ong KL, et al. (2017). Training loads and injury risk
-#' in Australian football: differing acute:chronic workload ratios influence
-#' match injury risk. *British Journal of Sports Medicine*, 51(16), 1215-1220.
+#' Carey DL, Blanch P, Ong K-L, et al. (2017). Training loads and injury risk
+#' in Australian football—differing acute:chronic workload ratios influence
+#' match injury risk. *British Journal of Sports Medicine*, 51, 1215-1220.
 #'
 #' @seealso [monotony_strain()], [srpe_load()], [as_daily_load()].
 #'

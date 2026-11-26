@@ -78,9 +78,9 @@ rolling_load(x, window = 3, same_day_load = "exclude")
 
 }
 \references{
-Carey DL, Blanch P, Ong KL, et al. (2017). Training loads and injury risk
-in Australian football: differing acute:chronic workload ratios influence
-match injury risk. \emph{British Journal of Sports Medicine}, 51(16), 1215-1220.
+Carey DL, Blanch P, Ong K-L, et al. (2017). Training loads and injury risk
+in Australian football—differing acute:chronic workload ratios influence
+match injury risk. \emph{British Journal of Sports Medicine}, 51, 1215-1220.
 }
 \seealso{
 \code{\link[=monotony_strain]{monotony_strain()}}, \code{\link[=srpe_load]{srpe_load()}}, \code{\link[=as_daily_load]{as_daily_load()}}.

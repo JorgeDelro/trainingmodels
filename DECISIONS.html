@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">trainingmodels</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,6 +50,10 @@
 <li>D-011 (2026-11-24) Impulse-response functions implement both timing conventions found in the literature, selected with the argument <code>same_day_load</code>: “exclude” (sum to n-1; Busso &amp; Chalencon 2023) and “include” (Morton et al. 1990, Eqs. 4-5). Reason: the two forms are not equivalent and both are in use; see MODELS.md, M-01.</li>
 <li>D-012 (2026-11-24) The default is <code>same_day_load = "exclude"</code>. Every fitted object stores and prints its convention, because gains fitted under one convention are not comparable with the other.</li>
 <li>D-013 (2026-11-24) MODELS.md is the model registry and single source of truth for formulas, verification sources, reference values and literature discrepancies. Its first version (entries M-01 to M-09) was approved by the author on 2026-11-24.</li>
+<li>D-014 (2026-11-25) The package and the app ship pre-built example datasets modelled on published studies; they are simulated and labelled as simulated. All impulse-response models share one data format (daily load plus performance on some days). The app explains the format and the variables to collect for users who upload their own data.</li>
+<li>D-015 (2026-11-25) Every day has one of three states: training (load &gt; 0), rest (load = 0), missing (load not available). Days with no row between an athlete’s first and last date are treated as rest by default, with a message listing how many were filled, and a warning when more than 7 consecutive days are filled. The user can request that such days be treated as missing instead.</li>
+<li>D-016 (2026-11-25) Missing loads are never silently replaced. Descriptors return NA for windows containing a missing day. Impulse-response models refuse to run on series with missing loads unless the user explicitly chooses how to fill them; in the first version the only option is zero.</li>
+<li>D-017 (2026-11-25) A data file may contain several athletes (optional identifier column) and several load columns; each analysis uses one load column chosen by the user.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="proposed-architecture-awaiting-author-approval">Proposed (architecture, awaiting author approval)<a class="anchor" aria-label="anchor" href="#proposed-architecture-awaiting-author-approval"></a></h2>
@@ -61,12 +65,12 @@
 <li>A-006 Model comparison with AICc and Akaike weights.</li>
 <li>A-007 Reference values for tests generated outside the package from the R script of Busso &amp; Chalencon (2023, Supplemental Digital Content 2) and from the dorem package; neither is a dependency.</li>
 <li>A-008 dlnm and REDI as Suggests, from version 0.3.</li>
-<li>A-009 All impulse-response models share one data format (daily load plus performance on some days). Example datasets imitate published designs, are simulated, and are labelled as simulated; a data-collection template ships with the package.</li>
+<li>A-010 The core has no dependencies beyond base R, so that it can run in the browser (Shinylive).</li>
 </ul></div>
 <div class="section level2">
 <h2 id="pending-product-and-domain-author-to-decide">Pending (product and domain, author to decide)<a class="anchor" aria-label="anchor" href="#pending-product-and-domain-author-to-decide"></a></h2>
 <ul><li>P-001 Which outcome students will have for Banister (repeated performance tests or not); whether Banister in the app is simulation plus example data.</li>
-<li>P-002 What students record per session and how rest days are told apart from missing days.</li>
+<li>P-002 Closed 2026-11-25: resolved by D-015 to D-017.</li>
 <li>P-003 How students access the app (local R or hosted URL).</li>
 <li>P-004 Language of the theory documentation and of the app interface.</li>
 <li>P-005 Planned research use in the next six months (JOSS vs JOSE).</li>

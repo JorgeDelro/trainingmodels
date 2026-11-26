@@ -40,6 +40,26 @@ reason. Approved entries are decided by the author.
   of truth for formulas, verification sources, reference values and
   literature discrepancies. Its first version (entries M-01 to M-09) was
   approved by the author on 2026-11-24.
+- D-014 (2026-11-25) The package and the app ship pre-built example
+  datasets modelled on published studies; they are simulated and
+  labelled as simulated. All impulse-response models share one data
+  format (daily load plus performance on some days). The app explains
+  the format and the variables to collect for users who upload their own
+  data.
+- D-015 (2026-11-25) Every day has one of three states: training (load
+  \> 0), rest (load = 0), missing (load not available). Days with no row
+  between an athlete’s first and last date are treated as rest by
+  default, with a message listing how many were filled, and a warning
+  when more than 7 consecutive days are filled. The user can request
+  that such days be treated as missing instead.
+- D-016 (2026-11-25) Missing loads are never silently replaced.
+  Descriptors return NA for windows containing a missing day.
+  Impulse-response models refuse to run on series with missing loads
+  unless the user explicitly chooses how to fill them; in the first
+  version the only option is zero.
+- D-017 (2026-11-25) A data file may contain several athletes (optional
+  identifier column) and several load columns; each analysis uses one
+  load column chosen by the user.
 
 ## Proposed (architecture, awaiting author approval)
 
@@ -58,18 +78,15 @@ reason. Approved entries are decided by the author.
   the R script of Busso & Chalencon (2023, Supplemental Digital
   Content 2) and from the dorem package; neither is a dependency.
 - A-008 dlnm and REDI as Suggests, from version 0.3.
-- A-009 All impulse-response models share one data format (daily load
-  plus performance on some days). Example datasets imitate published
-  designs, are simulated, and are labelled as simulated; a
-  data-collection template ships with the package.
+- A-010 The core has no dependencies beyond base R, so that it can run
+  in the browser (Shinylive).
 
 ## Pending (product and domain, author to decide)
 
 - P-001 Which outcome students will have for Banister (repeated
   performance tests or not); whether Banister in the app is simulation
   plus example data.
-- P-002 What students record per session and how rest days are told
-  apart from missing days.
+- P-002 Closed 2026-11-25: resolved by D-015 to D-017.
 - P-003 How students access the app (local R or hosted URL).
 - P-004 Language of the theory documentation and of the app interface.
 - P-005 Planned research use in the next six months (JOSS vs JOSE).

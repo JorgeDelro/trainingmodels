@@ -2,8 +2,13 @@ url: https://jorgedelro.github.io/trainingmodels/
 template:
   bootstrap: 5
 
-# Reference index: empty until the first exported function is added.
-reference: []
+reference:
+- title: Daily series
+  desc: Build and inspect the daily training-load calendar.
+  contents:
+  - as_daily_load
+  - print.daily_load
+  - summary.daily_load
 
 # Articles: one article per method (DECISIONS.md, D-006). pkgdown does not
 # accept an empty `contents` field, so uncomment this section when the first

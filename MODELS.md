@@ -335,7 +335,7 @@ appear in Morton et al. (1990). To be resolved before implementation.
 ## M-10 Session RPE load
 
 **Status:** `verified` · planned for 0.0.2
-**Author approval:** pending
+**Author approval:** approved 2026-11-26
 
 $$
 w = \mathrm{RPE} \times D
@@ -368,7 +368,7 @@ duration (discrepancy log, #16); it is not used as a test.
 ## M-11 Rolling load
 
 **Status:** `verified` · planned for 0.0.2
-**Author approval:** pending
+**Author approval:** approved 2026-11-26
 
 For daily loads $w(1), \dots, w(T)$ of one athlete and a window of $k$ days:
 
@@ -395,7 +395,7 @@ $$
 ## M-12 Monotony and strain
 
 **Status:** `verified` · planned for 0.0.2
-**Author approval:** pending
+**Author approval:** approved 2026-11-26
 
 Foster (1998):
 
@@ -481,8 +481,11 @@ Physiol Perform* 17:810-3); Imbach et al. 2022 (*Sports Med Open* 8:29);
 Marchal et al. 2025 (*Sci Rep* 15:3706); Kontro et al. 2025 (author
 manuscript); Wang et al. 2025 (*PLOS One* 20:e0337824); Ceddia et al. 2025
 (arXiv preprint); Stephens Hemingway et al. 2021 and Swinton et al. 2021
-(SportRxiv preprints, Parts I and II); Foster 1998; Foster et al. 2001;
-Carey et al. 2017; Williams et al. 2017.
+(SportRxiv preprints, Parts I and II).
+
+**Read as PDF:** Foster 1998; Foster et al. 2001; Carey et al. 2017; Williams
+et al. 2017. The Foster 1998 file is a print of the journal web page; its
+Table 1 was read from the embedded image.
 
 **Not yet read** (needed before the entries that cite them can be `verified`):
 Banister et al. 1975; Calvert et al. 1976; Fitz-Clarke et al. 1991; Busso et

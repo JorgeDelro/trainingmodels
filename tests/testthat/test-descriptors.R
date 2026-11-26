@@ -202,6 +202,18 @@ test_that("seven rest days give sd 0 and NA monotony and strain", {
   expect_true(is.na(out$strain[7]))
 })
 
+test_that("seven equal non-integer loads give sd exactly 0 and NA monotony", {
+  # The rule compares the loads (min equal to max), because sd() of identical
+  # decimals is not guaranteed to be exactly 0 on every platform.
+  for (load in list(rep(0.1, 7), rep(1 / 3, 7))) {
+    out <- monotony_strain(daily(load))
+    expect_identical(out$sd_load[7], 0)
+    expect_equal(out$mean_load[7], load[1])
+    expect_true(is.na(out$monotony[7]))
+    expect_true(is.na(out$strain[7]))
+  }
+})
+
 test_that("rest days count as load 0 in monotony", {
   out <- monotony_strain(daily(c(500, 0, 500, 0)), window = 4)
   expect_equal(out$mean_load[4], 250)

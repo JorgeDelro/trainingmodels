@@ -1,6 +1,6 @@
 Package: trainingmodels
 Title: Mathematical Models of Training Load and Training Response
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: 
     person("Jorge del Rosario", "Fernández Santos", , "jorgedelrosario.fernandez@uca.es", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-5047-2976"))
@@ -18,3 +18,4 @@ RoxygenNote: 7.3.3
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Config/Needs/website: rmarkdown

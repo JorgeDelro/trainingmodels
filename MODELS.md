@@ -334,7 +334,7 @@ appear in Morton et al. (1990). To be resolved before implementation.
 
 ## M-10 Session RPE load
 
-**Status:** `verified` · planned for 0.0.2
+**Status:** `verified` · implemented in 0.0.2
 **Author approval:** approved 2026-11-26
 
 $$
@@ -367,7 +367,7 @@ duration (discrepancy log, #16); it is not used as a test.
 
 ## M-11 Rolling load
 
-**Status:** `verified` · planned for 0.0.2
+**Status:** `verified` · implemented in 0.0.2
 **Author approval:** approved 2026-11-26
 
 For daily loads $w(1), \dots, w(T)$ of one athlete and a window of $k$ days:
@@ -394,7 +394,7 @@ $$
 
 ## M-12 Monotony and strain
 
-**Status:** `verified` · planned for 0.0.2
+**Status:** `verified` · implemented in 0.0.2
 **Author approval:** approved 2026-11-26
 
 Foster (1998):

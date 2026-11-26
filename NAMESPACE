@@ -3,3 +3,6 @@
 S3method(print,daily_load)
 S3method(summary,daily_load)
 export(as_daily_load)
+export(monotony_strain)
+export(rolling_load)
+export(srpe_load)

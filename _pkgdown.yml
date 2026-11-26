@@ -9,12 +9,16 @@ reference:
   - as_daily_load
   - print.daily_load
   - summary.daily_load
+- title: Load descriptors
+  desc: Session RPE load, rolling load, monotony and strain.
+  contents:
+  - srpe_load
+  - rolling_load
+  - monotony_strain
 
-# Articles: one article per method (DECISIONS.md, D-006). pkgdown does not
-# accept an empty `contents` field, so uncomment this section when the first
-# vignette is added.
-# articles:
-# - title: Articles
-#   desc: Theory, computation and limitations of each method.
-#   contents:
-#   - <vignette-name>
+# Articles: one article per method (DECISIONS.md, D-006).
+articles:
+- title: Articles
+  desc: Theory, computation and limitations of each method.
+  contents:
+  - articles/monotony-strain

@@ -50,7 +50,7 @@ recorded in the entry.
 
 ## M-01 Exponential filter and the two timing conventions
 
-**Status:** `verified` (both conventions) · planned for 0.0.3
+**Status:** `verified` (both conventions) · implemented in 0.0.3
 **Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (initial state): approved 2026-11-27
 
 The literature uses two different discrete forms. They are not equivalent and
@@ -132,7 +132,7 @@ $g_{\mathrm{exc}}(t+1) = e^{-1/\tau}\,g_{\mathrm{inc}}(t)$ still hold.
 
 ## M-02 Two-component impulse-response model (Banister)
 
-**Status:** `verified` · planned for 0.0.3 (simulation) and 0.1.0 (fit)
+**Status:** `verified` · simulation implemented in 0.0.3; fit planned for 0.1.0
 **Author approval:** approved 2026-11-24 (entry as written; verification status unchanged)
 
 $$
@@ -192,7 +192,7 @@ the model without constraints gives maximal training followed by rest [Ceddia
 
 ## M-03 One-component model (fitness only)
 
-**Status:** `partly verified` · planned for 0.0.3 (D-023)
+**Status:** `partly verified` · implemented in 0.0.3 (D-023)
 **Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (status): approved 2026-11-27
 
 $$
@@ -206,7 +206,7 @@ Equation as printed in Marchal et al. (2025, "FOM"). Busso, Carasso & Lacour
 
 ## M-04 Response to constant daily training
 
-**Status:** `verified` for convention "include" · planned for 0.0.3 (tests)
+**Status:** `verified` for convention "include" · implemented in 0.0.3
 **Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (convention "exclude", existence, reference values): approved 2026-11-27, after correcting the asymptote under "exclude"
 
 For $w(t) = T$ every day from day 1 (Morton et al. 1990, Eqs. 6, 9-11):
@@ -270,7 +270,7 @@ minimum of $p$ on day 16.
 
 ## M-05 Response to a single session (influence curve)
 
-**Status:** `partly verified` · planned for 0.0.3
+**Status:** `partly verified` · implemented in 0.0.3
 **Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (convention, existence, reference values): approved 2026-11-27, including the condition $k_1 > 0$
 
 Effect on performance $u$ days after one unit of load:

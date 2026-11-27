@@ -292,7 +292,7 @@ been read.
 
 ## M-08 Exponentially weighted moving average and its link to M-01
 
-**Status:** `partly verified` · planned for 0.0.2
+**Status:** `partly verified` · not implemented in this package (D-019)
 **Author approval:** approved 2026-11-24 (entry as written; verification status unchanged)
 
 $$
@@ -302,10 +302,13 @@ $$
 | Parameterisation | $\lambda$ | Source |
 |---|---|---|
 | Time constant ("CTL"/"ATL" of training platforms) | $1 - e^{-1/\tau}$ | Kontro et al. 2025, Eqs. 17-18 (author manuscript read; check the published version) |
-| Span $N$ days | $2 / (N + 1)$ | Williams et al. 2017, as verified by the author for ACWR 0.2.0; not re-read for this registry |
+| Span $N$ days | $2 / (N + 1)$ | Williams et al. 2017, read: EWMA_today = Load_today * lambda + (1 - lambda) * EWMA_yesterday, lambda = 2/(N + 1), N = 7 and 28, initialised with the load of day 1 |
 
 With $\lambda = 1 - e^{-1/\tau}$ the EWMA equals $(1 - e^{-1/\tau})\,g_{\mathrm{inc}}(t)$:
 the platform "fitness" is the fitness component of M-02 without gains.
+
+EWMA-based loads are provided by the ACWR package (D-019), not by
+trainingmodels.
 
 ---
 
@@ -329,12 +332,104 @@ appear in Morton et al. (1990). To be resolved before implementation.
 
 ---
 
-## Descriptors (pending entries)
+## M-10 Session RPE load
 
-To be written from the verification already done for ACWR 0.2.0 and from the
-original articles once available: rolling sums and means, coupled and uncoupled
-ACWR, week-to-week change, monotony and strain (Foster 1998), session RPE
-(Foster et al. 2001), multi-window matrices.
+**Status:** `verified` · implemented in 0.0.2
+**Author approval:** approved 2026-11-26
+
+$$
+w = \mathrm{RPE} \times D
+$$
+
+- RPE on the 0-10 category-ratio scale: one global rating for the whole
+  session, asked about 30 minutes after it ends.
+- $D$: duration in minutes of the entire session, including warm-up,
+  cool-down and recovery intervals.
+- Sessions of the same day are summed (as for every load; see `as_daily_load()`).
+
+**Verification**
+
+| Checked against | How |
+|---|---|
+| Foster 1998; Foster et al. 2001 | Definition read; Table 1 of Foster 1998 recomputed |
+
+**Reference values** (Foster 1998, Table 1):
+
+| Duration (min) | 180 | 120 | 20 | 90 | 75 | 20 | 120 |
+|---|---|---|---|---|---|---|---|
+| RPE | 5 | 7 | 2 | 6 | 7 | 2 | 7 |
+| Load | 900 | 840 | 40 | 540 | 525 | 40 | 840 |
+
+Foster et al. 2001, Table 5, prints loads that do not all equal RPE x
+duration (discrepancy log, #16); it is not used as a test.
+
+---
+
+## M-11 Rolling load
+
+**Status:** `verified` · implemented in 0.0.2
+**Author approval:** approved 2026-11-26
+
+For daily loads $w(1), \dots, w(T)$ of one athlete and a window of $k$ days:
+
+$$
+S_{\mathrm{inc}}(t) = \sum_{j=t-k+1}^{t} w(j), \quad t \ge k;
+\qquad
+S_{\mathrm{exc}}(t) = \sum_{j=t-k}^{t-1} w(j), \quad t \ge k + 1
+$$
+
+- Rolling mean $= S(t) / k$.
+- $S(t)$ is NA where it is not defined or where any day in the window is
+  missing (D-016).
+- Identity: $S_{\mathrm{exc}}(t) = S_{\mathrm{inc}}(t-1)$.
+- Timing option `same_day_load` as in D-020; default `"include"` (D-021).
+
+**Verification**
+
+| Checked against | How |
+|---|---|
+| Carey et al. 2017, Eq. 1 | Equation as printed; uses the "exclude" form for both windows of a daily workload ratio |
+
+---
+
+## M-12 Monotony and strain
+
+**Status:** `verified` · implemented in 0.0.2
+**Author approval:** approved 2026-11-26
+
+Foster (1998):
+
+$$
+\text{monotony} = \frac{\text{mean daily load of the week}}
+{\text{SD of the daily loads of the week}},
+\qquad
+\text{strain} = \text{weekly load} \times \text{monotony}
+$$
+
+- SD is the sample standard deviation ($n - 1$).
+- Assumption, not stated by Foster: rest days count as load 0.
+- Package generalisation: the week is a rolling window of $k$ days (default 7)
+  under either timing option of M-11 (D-022). When all loads in the window
+  are equal the SD is 0 and monotony and strain are NA.
+
+**Verification**
+
+| Checked against | How |
+|---|---|
+| Foster 1998, Table 1 | Recomputed from the daily loads of M-10 with the sample SD |
+
+**Reference values** (Foster 1998, Table 1; loads 900, 840, 40, 540, 525, 40,
+840):
+
+| Quantity | Published | Recomputed |
+|---|---|---|
+| Weekly load | 3725 | 3725 |
+| Mean daily load | 532 | 532.142857 |
+| SD | 367 | 367.285733 |
+| Monotony | 1.44 | 1.448853 |
+| Strain | 5397 | 5396.9756 |
+
+The published monotony is truncated, not rounded (discrepancy log, #17).
 
 ---
 
@@ -357,6 +452,8 @@ ACWR, week-to-week change, monotony and strain (Foster 1998), session RPE
 | 13 | Swinton et al. 2021, Part II (preprint) | Eq. 22; Eq. 16 | Turner optimum does not match a direct derivation; Kalman update omits the baseline | Rederivation |
 | 14 | Kontro et al. 2025 (author manuscript) | Section III text vs Table 1 | Strain coefficient at critical power stated as 0.27; formula and table give 0.25 | Recomputation |
 | 15 | Wang et al. 2025 | Eqs. 3-4, 10, 14 | Not an impulse-response model (no accumulation of past loads); gains and constants enter only as differences; stated general solution of Eqs. 1-2 is incorrect; "original model" is a line through the origin | Reading |
+| 16 | Foster et al. 2001 | Table 5 | Three printed loads differ from RPE x duration (940 vs 5 x 180 = 900; 390 vs 8 x 75 = 600, twice). The printed monotony 1.26 is not reproduced from the printed daily loads (1.12 with the sample SD, 1.21 with the population SD). Not used as a test | Recalculation |
+| 17 | Foster 1998 | Table 1 | Monotony printed as 1.44; the value is 1.449 (truncated). The printed strain 5397 agrees with the unrounded monotony | Recalculation |
 
 ---
 
@@ -386,7 +483,10 @@ manuscript); Wang et al. 2025 (*PLOS One* 20:e0337824); Ceddia et al. 2025
 (arXiv preprint); Stephens Hemingway et al. 2021 and Swinton et al. 2021
 (SportRxiv preprints, Parts I and II).
 
+**Read as PDF:** Foster 1998; Foster et al. 2001; Carey et al. 2017; Williams
+et al. 2017. The Foster 1998 file is a print of the journal web page; its
+Table 1 was read from the embedded image.
+
 **Not yet read** (needed before the entries that cite them can be `verified`):
 Banister et al. 1975; Calvert et al. 1976; Fitz-Clarke et al. 1991; Busso et
-al. 1991; Busso 2003; Hellard et al. 2005 and 2006; Foster 1998; Foster et al.
-2001; Carey et al. 2017; Banister 1991.
+al. 1991; Busso 2003; Hellard et al. 2005 and 2006; Banister 1991.

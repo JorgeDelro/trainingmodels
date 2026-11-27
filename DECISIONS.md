@@ -55,6 +55,25 @@ reason. Approved entries are decided by the author.
 - D-017 (2026-11-25) A data file may contain several athletes (optional
   identifier column) and several load columns; each analysis uses one load
   column chosen by the user.
+- D-018 (2026-11-26) A second model family, training load -> injury, enters
+  the package from version 0.3: distributed lag non-linear models (wrapping
+  dlnm), the piece-wise exponential additive mixed model with cumulative
+  effects of Zumeta-Olaskoaga et al. 2025 (wrapping pammtools and mgcv), and
+  tools to evaluate predictions (discrimination, calibration).
+  Neural-network and structural-equation approaches are not implemented.
+- D-019 (2026-11-26) Everything related to the acute:chronic workload ratio
+  (ratios, EWMA-based loads, FWF matrices of Matas-Bustos et al. 2025) lives
+  only in the author's ACWR package. trainingmodels does not reimplement it;
+  the documentation refers to ACWR.
+- D-020 (2026-11-26) Window-based descriptors offer both timing options
+  through `same_day_load` ("include": the window ends on the current day;
+  "exclude": it ends on the previous day, as in Carey et al. 2017, Eq. 1).
+- D-021 (2026-11-26) The default for descriptors is
+  `same_day_load = "include"`. This differs from the impulse-response
+  default (D-012) and must be stated in the help of every descriptor.
+- D-022 (2026-11-26) Monotony and strain: rolling 7-day window computed
+  every day; rest days count as load 0; when all loads in the window are
+  equal the standard deviation is 0 and monotony and strain are NA.
 
 ## Proposed (architecture, awaiting author approval)
 - A-001 One daily-series class as the single entry point: validates input,
@@ -73,6 +92,9 @@ reason. Approved entries are decided by the author.
 - A-008 dlnm and REDI as Suggests, from version 0.3.
 - A-010 The core has no dependencies beyond base R, so that it can run in
   the browser (Shinylive).
+- A-011 Every function that takes a daily_load validates it first with one
+  internal validator, and returns a plain data frame with one row per row of
+  the input, in the same order (athlete, date, load, then results).
 
 ## Pending (product and domain, author to decide)
 - P-001 Which outcome students will have for Banister (repeated performance

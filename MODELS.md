@@ -325,7 +325,7 @@ argument names must not use a bare `t_n`. Names (D-026): `time_to_recover`
 parameter sets with a similar fit gave small, although statistically
 significant, differences in the response to a session; the authors recommend
 characterising an athlete by that response rather than by each parameter taken
-individually.
+individually [Busso & Chalencon 2023, Discussion and SDC 3].
 
 ---
 

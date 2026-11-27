@@ -51,7 +51,7 @@ recorded in the entry.
 ## M-01 Exponential filter and the two timing conventions
 
 **Status:** `verified` (both conventions) · planned for 0.0.3
-**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged)
+**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (initial state): pending
 
 The literature uses two different discrete forms. They are not equivalent and
 the package offers both through the argument
@@ -109,8 +109,24 @@ $$
 - Morton's Eqs. 4-5 allow any spacing $i$ between sessions, including several
   sessions per day. The package aggregates to one value per day; this is a
   simplification of Morton's formulation.
-- Initial state is $g(0) = h(0) = 0$ unless set by the user. Morton et al.
-  assigned an initial fitness of 1,000 units to one subject.
+- Initial state is $g(0) = h(0) = 0$ unless set by the user (D-025). Morton
+  et al. assigned an initial fitness of 1,000 units to one subject.
+
+**Initial state** (amendment 2026-11-27; derived here, not taken from a
+source). With initial value $g(0) = g_0$, both conventions add
+$g_0\,e^{-t/\tau}$ to day $t$:
+
+$$
+g_{\mathrm{inc}}(t) = g_0\,e^{-t/\tau} + \sum_{s=1}^{t} w(s)\,e^{-(t-s)/\tau},
+\qquad
+g_{\mathrm{exc}}(t) = g_0\,e^{-t/\tau} + \sum_{s=1}^{t-1} w(s)\,e^{-(t-s)/\tau}
+$$
+
+so that $g_{\mathrm{inc}}(1) = g_0\,e^{-1/\tau} + w(1)$ and
+$g_{\mathrm{exc}}(1) = g_0\,e^{-1/\tau}$. The recursions of M-01 start from
+$g(0) = g_0$ (with $w(0) = 0$ under "exclude"), and the identities
+$g_{\mathrm{inc}}(t) = g_{\mathrm{exc}}(t) + w(t)$ and
+$g_{\mathrm{exc}}(t+1) = e^{-1/\tau}\,g_{\mathrm{inc}}(t)$ still hold.
 
 ---
 
@@ -172,8 +188,8 @@ rest [Busso & Chalencon 2023; Ceddia 2025, preprint].
 
 ## M-03 One-component model (fitness only)
 
-**Status:** `partly verified` · proposed for 0.0.3 (decision P-007 pending)
-**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged)
+**Status:** `partly verified` · planned for 0.0.3 (D-023)
+**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (status): pending
 
 $$
 p(t) = p_0 + k_1\,g(t)
@@ -187,7 +203,7 @@ Equation as printed in Marchal et al. (2025, "FOM"). Busso, Carasso & Lacour
 ## M-04 Response to constant daily training
 
 **Status:** `verified` for convention "include" · planned for 0.0.3 (tests)
-**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged)
+**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (convention "exclude", existence, reference values): pending
 
 For $w(t) = T$ every day from day 1 (Morton et al. 1990, Eqs. 6, 9-11):
 
@@ -211,12 +227,26 @@ $$
 g_{\mathrm{exc}}(t) = T\,e^{-1/\tau}\,\frac{1 - e^{-(t-1)/\tau}}{1 - e^{-1/\tau}}
 $$
 
+**Amendment 2026-11-27** (derived here, not taken from a source):
+
+- The day of poorest performance $t_{\min}$ is the same under "exclude":
+  $g_{\mathrm{exc}}(t) = g_{\mathrm{inc}}(t) - T$ for constant training, so
+  both forms have the same derivative in $t$. The asymptote $p(\infty)$ is
+  also the same.
+- $t_{\min}$ exists only if $\tau_1 > \tau_2$ and the argument of the
+  logarithm is $> 1$; otherwise it is NA (D-026).
+
+**Reference values, convention "exclude"** (Morton's example, M-02; $w = 100$
+per day from day 1, $\tau_1 = 45$, $\tau_2 = 15$, $k_1 = 1$, $k_2 = 2$, no
+baseline; recomputed here): $k_1 g(60) = 3250.7694$, $k_2 h(60) = 2844.3122$,
+minimum of $p$ on day 16.
+
 ---
 
 ## M-05 Response to a single session (influence curve)
 
 **Status:** `partly verified` · planned for 0.0.3
-**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged)
+**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (convention, existence, reference values): pending
 
 Effect on performance $u$ days after one unit of load:
 
@@ -244,9 +274,26 @@ Eqs. 3-4, as $t_r$ and $t_p$). The original, Fitz-Clarke, Morton & Banister
 | $k_1 = 0.048$, $k_2 = 0.117$, $\tau_1 = 38$, $\tau_2 = 1.9$ | Ceddia 2025, Fig. 2 (parameters attributed to Busso 1991) | 1.78, 7.77 | 1.78, 7.77 |
 | Clarke & Skiba 2013 fit (M-02) | Fig. 8B | 12, 40 | 12.2, 39.6 |
 
+**Amendment 2026-11-27** (derived here, not taken from a source):
+
+- $t_n$ and $t_g$ do not depend on the timing convention. Only the effect on
+  the day of the session does: $k_1 - k_2$ under "include", 0 under
+  "exclude". For $u \ge 1$ both conventions give $L(u)$.
+- Existence, for $\tau_1 > \tau_2$: $t_n$ (`time_to_recover`) exists if
+  $k_2 > k_1$; $t_g$ (`time_to_peak`) exists if
+  $k_2\,\tau_1 > k_1\,\tau_2$. Both also need $k_1 > 0$: with $k_1 = 0$ the
+  effect is never positive and the logarithms are infinite. If
+  $\tau_1 \le \tau_2$, or for the fitness-only model (M-03), both are NA
+  (D-026).
+
+**Reference values for Morton's parameters** ($k_1 = 1$, $k_2 = 2$,
+$\tau_1 = 45$, $\tau_2 = 15$; recomputed here): $t_n = 15.5958$ days,
+$t_g = 40.3146$ days, effect at the peak $L(t_g) = 0.272166$ per unit of
+load.
+
 **Name clash.** Morton et al. (1990) use $t_n$ for a different quantity: the
 day of poorest performance under constant daily training (M-04). Function and
-argument names must not use a bare `t_n`. Proposed names: `time_to_recover`
+argument names must not use a bare `t_n`. Names (D-026): `time_to_recover`
 ($t_n$ here), `time_to_peak` ($t_g$), `time_of_minimum` (M-04).
 
 **Recommendation to document:** report the single-session response rather than

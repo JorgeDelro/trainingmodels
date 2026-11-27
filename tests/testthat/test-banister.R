@@ -152,11 +152,21 @@ test_that("predicted is p0 + k1 * fitness - k2 * fatigue", {
 # 4. constant_training() (M-04) ---------------------------------------------
 
 test_that("constant_training() gives Morton's asymptote and minimum", {
+  # The asymptote depends on the convention: p_exc = p_inc - (k1 - k2) * T.
+  asymptote <- c(include = 1449.0742, exclude = 1549.0742)
   for (convention in c("include", "exclude")) {
     out <- constant_training(100, k1 = 1, tau1 = 45, k2 = 2, tau2 = 15,
                              same_day_load = convention)
-    expect_near(out$asymptote, 1449.0742)
+    expect_near(out$asymptote, asymptote[[convention]])
     expect_near(out$time_of_minimum, 16.0921)
+  }
+})
+
+test_that("the last value of a long curve equals the asymptote", {
+  for (convention in c("include", "exclude")) {
+    out <- constant_training(100, k1 = 1, tau1 = 45, k2 = 2, tau2 = 15,
+                             days = 3000, same_day_load = convention)
+    expect_near(out$curve$predicted[3000], out$asymptote, tol = 1e-6)
   }
 })
 
@@ -175,9 +185,10 @@ test_that("constant_training() curve equals simulate_banister()", {
 })
 
 test_that("constant_training() asymptote includes p0", {
+  # Default convention "exclude".
   out <- constant_training(100, k1 = 1, tau1 = 45, k2 = 2, tau2 = 15,
                            p0 = 500)
-  expect_near(out$asymptote, 1949.0742)
+  expect_near(out$asymptote, 2049.0742)
 })
 
 test_that("time_of_minimum is NA when there is no minimum (D-026)", {
@@ -212,7 +223,10 @@ test_that("constant_training() returns its documented structure", {
   fo <- constant_training(100, k1 = 1, tau1 = 45, model = "fitness_only")
   expect_true(all(is.na(fo$curve$fatigue)))
   expect_equal(fo$curve$predicted, fo$curve$fitness)
-  expect_near(fo$asymptote, 100 / (1 - exp(-1 / 45)))
+  expect_near(fo$asymptote, 4450.1852)
+  fo_inc <- constant_training(100, k1 = 1, tau1 = 45, model = "fitness_only",
+                              same_day_load = "include")
+  expect_near(fo_inc$asymptote, 4550.1852)
 })
 
 # 5. session_response() (M-05) ----------------------------------------------

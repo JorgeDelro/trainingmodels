@@ -51,7 +51,7 @@ recorded in the entry.
 ## M-01 Exponential filter and the two timing conventions
 
 **Status:** `verified` (both conventions) · planned for 0.0.3
-**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (initial state): pending
+**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (initial state): approved 2026-11-27
 
 The literature uses two different discrete forms. They are not equivalent and
 the package offers both through the argument
@@ -180,16 +180,20 @@ correlated and several parameter sets fit equally well [Hellard 2006, not yet
 read; Busso & Chalencon 2023, SDC 3; Vermeire 2022, Table 1]; results depend on
 starting values with local optimisers [Vermeire 2022]; adding fatigue improved
 fit but not prediction in two datasets [Marchal 2025]; with 56-104 tests per
-swimmer $R^2$ was 0.29 and prediction error 2-3% [Busso & Chalencon 2023]; the
-model is linear in load, so its optimal plan is maximal training followed by
-rest [Busso & Chalencon 2023; Ceddia 2025, preprint].
+swimmer the mean $R^2$ of the model was 0.29, and the mean absolute percentage
+error of its predictions was 2.0% and 2.7% in two validation sets [Busso &
+Chalencon 2023]; the positive effect is linear in training load, so the model
+cannot represent maladaptation to overtraining, and an optimal training load
+before a taper cannot be searched with it [Busso & Chalencon 2023]; optimising
+the model without constraints gives maximal training followed by rest [Ceddia
+2025, preprint].
 
 ---
 
 ## M-03 One-component model (fitness only)
 
 **Status:** `partly verified` · planned for 0.0.3 (D-023)
-**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (status): pending
+**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (status): approved 2026-11-27
 
 $$
 p(t) = p_0 + k_1\,g(t)
@@ -203,7 +207,7 @@ Equation as printed in Marchal et al. (2025, "FOM"). Busso, Carasso & Lacour
 ## M-04 Response to constant daily training
 
 **Status:** `verified` for convention "include" · planned for 0.0.3 (tests)
-**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (convention "exclude", existence, reference values): pending
+**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (convention "exclude", existence, reference values): approved 2026-11-27, after correcting the asymptote under "exclude"
 
 For $w(t) = T$ every day from day 1 (Morton et al. 1990, Eqs. 6, 9-11):
 
@@ -231,22 +235,43 @@ $$
 
 - The day of poorest performance $t_{\min}$ is the same under "exclude":
   $g_{\mathrm{exc}}(t) = g_{\mathrm{inc}}(t) - T$ for constant training, so
-  both forms have the same derivative in $t$. The asymptote $p(\infty)$ is
-  also the same.
+  both forms have the same derivative in $t$.
+- The asymptote is **not** the same. Since
+  $g_{\mathrm{exc}}(t) = g_{\mathrm{inc}}(t) - T$,
+  $p_{\mathrm{exc}}(\infty) = p_{\mathrm{inc}}(\infty) - (k_1 - k_2)\,T$:
+
+$$
+p_{\mathrm{inc}}(\infty) = p_0 + \frac{k_1 T}{1 - e^{-1/\tau_1}}
+- \frac{k_2 T}{1 - e^{-1/\tau_2}},
+\qquad
+p_{\mathrm{exc}}(\infty) = p_0 + \frac{k_1 T\,e^{-1/\tau_1}}{1 - e^{-1/\tau_1}}
+- \frac{k_2 T\,e^{-1/\tau_2}}{1 - e^{-1/\tau_2}}
+$$
+
 - $t_{\min}$ exists only if $\tau_1 > \tau_2$ and the argument of the
-  logarithm is $> 1$; otherwise it is NA (D-026).
+  logarithm is $> 1$; otherwise it is NA (D-026). It also needs $k_1 > 0$:
+  with $k_1 = 0$ the argument is infinite and performance only falls (as in
+  M-05).
 
 **Reference values, convention "exclude"** (Morton's example, M-02; $w = 100$
 per day from day 1, $\tau_1 = 45$, $\tau_2 = 15$, $k_1 = 1$, $k_2 = 2$, no
 baseline; recomputed here): $k_1 g(60) = 3250.7694$, $k_2 h(60) = 2844.3122$,
 minimum of $p$ on day 16.
 
+**Asymptotes** (recomputed here; $T = 100$):
+
+| Model and parameters | "include" | "exclude" |
+|---|---|---|
+| Two-component, Morton's parameters, $p_0 = 0$ | 1449.0742 | 1549.0742 |
+| Two-component, Morton's parameters, $p_0 = 500$ | 1949.0742 | 2049.0742 |
+| Fitness-only, $k_1 = 1$, $\tau_1 = 45$, $p_0 = 0$ | 4550.1852 | 4450.1852 |
+
 ---
 
 ## M-05 Response to a single session (influence curve)
 
 **Status:** `partly verified` · planned for 0.0.3
-**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (convention, existence, reference values): pending
+**Author approval:** approved 2026-11-24 (entry as written; verification status unchanged) · amendment of 2026-11-27 (convention, existence, reference values): approved 2026-11-27, including the condition $k_1 > 0$
 
 Effect on performance $u$ days after one unit of load:
 
@@ -523,7 +548,8 @@ are simulated and labelled as such.
 **Read for this registry** (as Markdown conversions): Morton, Fitz-Clarke &
 Banister 1990 (*J Appl Physiol* 69:1171-7); Clarke & Skiba 2013 (*Adv Physiol
 Educ* 37:134-52) with supplemental spreadsheet; Busso & Chalencon 2023 (*Med
-Sci Sports Exerc* 55:1274-85) with SDC 2-3; Vermeire et al. 2022 (*Int J Sports
+Sci Sports Exerc* 55(7):1274-85), the accepted manuscript with SDC 2-3 and,
+from 2026-11-27, the published version; Vermeire et al. 2022 (*Int J Sports
 Physiol Perform* 17:810-3); Imbach et al. 2022 (*Sports Med Open* 8:29);
 Marchal et al. 2025 (*Sci Rep* 15:3706); Kontro et al. 2025 (author
 manuscript); Wang et al. 2025 (*PLOS One* 20:e0337824); Ceddia et al. 2025
@@ -533,6 +559,27 @@ manuscript); Wang et al. 2025 (*PLOS One* 20:e0337824); Ceddia et al. 2025
 **Read as PDF:** Foster 1998; Foster et al. 2001; Carey et al. 2017; Williams
 et al. 2017. The Foster 1998 file is a print of the journal web page; its
 Table 1 was read from the embedded image.
+
+**Full citations** (checked by the author against the files in `bib/`;
+used in help pages and articles):
+
+- Morton RH, Fitz-Clarke JR, Banister EW (1990). Modeling human performance
+  in running. *Journal of Applied Physiology*, 69(3), 1171-1177.
+- Clarke DC, Skiba PF (2013). Rationale and resources for teaching the
+  mathematical modeling of athletic training and performance. *Advances in
+  Physiology Education*, 37, 134-152.
+- Busso T, Chalencon S (2023). Validity and accuracy of impulse-response
+  models for modeling and predicting training effects on performance of
+  swimmers. *Medicine & Science in Sports & Exercise*, 55(7), 1274-1285.
+- Vermeire K, Ghijs M, Bourgois JG, Boone J (2022). The fitness-fatigue
+  model: what's in the numbers? *International Journal of Sports Physiology
+  and Performance*, 17, 810-813.
+- Marchal A, Benazieb O, Weldegebriel Y, Méline T, Imbach F (2025).
+  Statistical flaws of the fitness-fatigue sports performance prediction
+  model. *Scientific Reports*, 15, 3706.
+- Ceddia D, Bondell H, Taylor P (2025). Mathematical modelling and
+  optimisation of athletic performance: tapering and periodisation.
+  arXiv:2505.20859 (preprint).
 
 **Not yet read** (needed before the entries that cite them can be `verified`):
 Banister et al. 1975; Calvert et al. 1976; Fitz-Clarke et al. 1991; Busso et

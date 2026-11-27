@@ -321,9 +321,11 @@ day of poorest performance under constant daily training (M-04). Function and
 argument names must not use a bare `t_n`. Names (D-026): `time_to_recover`
 ($t_n$ here), `time_to_peak` ($t_g$), `time_of_minimum` (M-04).
 
-**Recommendation to document:** report the single-session response rather than
-individual parameters; two parameter sets with very different $\tau_1$ gave
-similar $t_n$ and $t_g$ [Busso & Chalencon 2023, SDC 3].
+**Recommendation to document:** In Busso & Chalencon (2023), alternative
+parameter sets with a similar fit gave small, although statistically
+significant, differences in the response to a session; the authors recommend
+characterising an athlete by that response rather than by each parameter taken
+individually.
 
 ---
 

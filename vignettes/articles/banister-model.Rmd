@@ -93,10 +93,11 @@ These times do not depend on the timing convention; only the effect on the
 day of the session does ($k_1 - k_2$ under "include", 0 under "exclude").
 They are `NA` when they do not exist: `time_to_recover` when
 $k_2 \le k_1$, `time_to_peak` when $k_2 \tau_1 \le k_1 \tau_2$, and both when
-$k_1 = 0$, when $\tau_1 \le \tau_2$ or for the fitness-only model. Two
-parameter sets with very different $\tau_1$ can give similar times (Busso &
-Chalencon 2023), so the response to a session is easier to interpret than
-the individual parameters.
+$k_1 = 0$, when $\tau_1 \le \tau_2$ or for the fitness-only model. In Busso
+& Chalencon (2023), alternative parameter sets with a similar fit gave
+small, although statistically significant, differences in the response to a
+session; the authors recommend characterising an athlete by that response
+rather than by each parameter taken individually.
 
 ## Computation
 

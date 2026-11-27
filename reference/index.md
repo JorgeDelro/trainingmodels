@@ -10,3 +10,14 @@ Build and inspect the daily training-load calendar.
   : Print a daily training-load series
 - [`summary(`*`<daily_load>`*`)`](https://jorgedelro.github.io/trainingmodels/reference/summary.daily_load.md)
   : Summarise a daily training-load series by athlete
+
+## Load descriptors
+
+Session RPE load, rolling load, monotony and strain.
+
+- [`srpe_load()`](https://jorgedelro.github.io/trainingmodels/reference/srpe_load.md)
+  : Session RPE load
+- [`rolling_load()`](https://jorgedelro.github.io/trainingmodels/reference/rolling_load.md)
+  : Rolling training load
+- [`monotony_strain()`](https://jorgedelro.github.io/trainingmodels/reference/monotony_strain.md)
+  : Training monotony and strain

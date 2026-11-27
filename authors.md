@@ -8,16 +8,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/JorgeDelro/trainingmodels/blob/v0.0.1/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/JorgeDelro/trainingmodels/blob/main/DESCRIPTION)
 
 Fernández Santos J (2026). *trainingmodels: Mathematical Models of
-Training Load and Training Response*. R package version 0.0.1,
+Training Load and Training Response*. R package version 0.0.2,
 <https://github.com/JorgeDelro/trainingmodels>.
 
     @Manual{,
       title = {trainingmodels: Mathematical Models of Training Load and Training Response},
       author = {Jorge del Rosario {Fernández Santos}},
       year = {2026},
-      note = {R package version 0.0.1},
+      note = {R package version 0.0.2},
       url = {https://github.com/JorgeDelro/trainingmodels},
     }

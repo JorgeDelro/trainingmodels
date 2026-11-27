@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">trainingmodels</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,6 +16,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/index.html">Articles</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
@@ -29,7 +30,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Design decisions</h1>
-      <small class="dont-index">Source: <a href="https://github.com/JorgeDelro/trainingmodels/blob/v0.0.1/DECISIONS.md" class="external-link"><code>DECISIONS.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JorgeDelro/trainingmodels/blob/main/DECISIONS.md" class="external-link"><code>DECISIONS.md</code></a></small>
     </div>
 
 <div id="design-decisions" class="section level1">
@@ -54,6 +55,11 @@
 <li>D-015 (2026-11-25) Every day has one of three states: training (load &gt; 0), rest (load = 0), missing (load not available). Days with no row between an athlete’s first and last date are treated as rest by default, with a message listing how many were filled, and a warning when more than 7 consecutive days are filled. The user can request that such days be treated as missing instead.</li>
 <li>D-016 (2026-11-25) Missing loads are never silently replaced. Descriptors return NA for windows containing a missing day. Impulse-response models refuse to run on series with missing loads unless the user explicitly chooses how to fill them; in the first version the only option is zero.</li>
 <li>D-017 (2026-11-25) A data file may contain several athletes (optional identifier column) and several load columns; each analysis uses one load column chosen by the user.</li>
+<li>D-018 (2026-11-26) A second model family, training load -&gt; injury, enters the package from version 0.3: distributed lag non-linear models (wrapping dlnm), the piece-wise exponential additive mixed model with cumulative effects of Zumeta-Olaskoaga et al. 2025 (wrapping pammtools and mgcv), and tools to evaluate predictions (discrimination, calibration). Neural-network and structural-equation approaches are not implemented.</li>
+<li>D-019 (2026-11-26) Everything related to the acute:chronic workload ratio (ratios, EWMA-based loads, FWF matrices of Matas-Bustos et al. 2025) lives only in the author’s ACWR package. trainingmodels does not reimplement it; the documentation refers to ACWR.</li>
+<li>D-020 (2026-11-26) Window-based descriptors offer both timing options through <code>same_day_load</code> (“include”: the window ends on the current day; “exclude”: it ends on the previous day, as in Carey et al. 2017, Eq. 1).</li>
+<li>D-021 (2026-11-26) The default for descriptors is <code>same_day_load = "include"</code>. This differs from the impulse-response default (D-012) and must be stated in the help of every descriptor.</li>
+<li>D-022 (2026-11-26) Monotony and strain: rolling 7-day window computed every day; rest days count as load 0; when all loads in the window are equal the standard deviation is 0 and monotony and strain are NA.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="proposed-architecture-awaiting-author-approval">Proposed (architecture, awaiting author approval)<a class="anchor" aria-label="anchor" href="#proposed-architecture-awaiting-author-approval"></a></h2>
@@ -66,6 +72,7 @@
 <li>A-007 Reference values for tests generated outside the package from the R script of Busso &amp; Chalencon (2023, Supplemental Digital Content 2) and from the dorem package; neither is a dependency.</li>
 <li>A-008 dlnm and REDI as Suggests, from version 0.3.</li>
 <li>A-010 The core has no dependencies beyond base R, so that it can run in the browser (Shinylive).</li>
+<li>A-011 Every function that takes a daily_load validates it first with one internal validator, and returns a plain data frame with one row per row of the input, in the same order (athlete, date, load, then results).</li>
 </ul></div>
 <div class="section level2">
 <h2 id="pending-product-and-domain-author-to-decide">Pending (product and domain, author to decide)<a class="anchor" aria-label="anchor" href="#pending-product-and-domain-author-to-decide"></a></h2>

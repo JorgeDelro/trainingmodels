@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">trainingmodels</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,7 +30,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Design decisions</h1>
-      <small class="dont-index">Source: <a href="https://github.com/JorgeDelro/trainingmodels/blob/v0.0.2/DECISIONS.md" class="external-link"><code>DECISIONS.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/JorgeDelro/trainingmodels/blob/main/DECISIONS.md" class="external-link"><code>DECISIONS.md</code></a></small>
     </div>
 
 <div id="design-decisions" class="section level1">
@@ -60,6 +60,10 @@
 <li>D-020 (2026-11-26) Window-based descriptors offer both timing options through <code>same_day_load</code> (“include”: the window ends on the current day; “exclude”: it ends on the previous day, as in Carey et al. 2017, Eq. 1).</li>
 <li>D-021 (2026-11-26) The default for descriptors is <code>same_day_load = "include"</code>. This differs from the impulse-response default (D-012) and must be stated in the help of every descriptor.</li>
 <li>D-022 (2026-11-26) Monotony and strain: rolling 7-day window computed every day; rest days count as load 0; when all loads in the window are equal the standard deviation is 0 and monotony and strain are NA.</li>
+<li>D-023 (2026-11-27) The fitness-only model (MODELS.md, M-03) is included, as an option of the same simulation function as the two-component model. Closes P-007.</li>
+<li>D-024 (2026-11-27) Half-life (tau x ln 2) is shown in printed output next to each time constant. Function arguments are always time constants, never half-lives. Closes P-010.</li>
+<li>D-025 (2026-11-27) Initial fitness and fatigue are 0 by default and can be set by the user in simulation. Fitting (0.1.0) will keep them fixed at 0 in its first version, documented as a limitation. Closes P-013.</li>
+<li>D-026 (2026-11-27) Characteristic times are named in words: <code>time_to_recover</code> and <code>time_to_peak</code> (single session, M-05), <code>time_of_minimum</code> (constant daily training, M-04). They are NA, with the reason stated in the help, when they do not exist. No function or argument is named <code>t_n</code>. Closes the naming question of MODELS.md, M-05.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="proposed-architecture-awaiting-author-approval">Proposed (architecture, awaiting author approval)<a class="anchor" aria-label="anchor" href="#proposed-architecture-awaiting-author-approval"></a></h2>
@@ -73,6 +77,7 @@
 <li>A-008 dlnm and REDI as Suggests, from version 0.3.</li>
 <li>A-010 The core has no dependencies beyond base R, so that it can run in the browser (Shinylive).</li>
 <li>A-011 Every function that takes a daily_load validates it first with one internal validator, and returns a plain data frame with one row per row of the input, in the same order (athlete, date, load, then results).</li>
+<li>A-012 Simulations return a data frame subclass with a print method whose header shows the model, the timing convention (D-012), the parameters and the half-lives. This is the one exception to “plain data frame” in A-011.</li>
 </ul></div>
 <div class="section level2">
 <h2 id="pending-product-and-domain-author-to-decide">Pending (product and domain, author to decide)<a class="anchor" aria-label="anchor" href="#pending-product-and-domain-author-to-decide"></a></h2>
@@ -82,13 +87,13 @@
 <li>P-004 Language of the theory documentation and of the app interface.</li>
 <li>P-005 Planned research use in the next six months (JOSS vs JOSE).</li>
 <li>P-006 Closed 2026-11-24: Morton et al. (1990) was read and uses a different timing convention; resolved by D-011 and D-012.</li>
-<li>P-007 Include the fitness-only model in the first version.</li>
+<li>P-007 Closed 2026-11-27: resolved by D-023.</li>
 <li>P-008 Every fit reports trivial comparators (mean, straight line).</li>
 <li>P-009 Fit output foregrounds the response to a single session (curve, t_n, t_g) over individual parameters.</li>
-<li>P-010 Show half-life alongside time constants.</li>
+<li>P-010 Closed 2026-11-27: resolved by D-024.</li>
 <li>P-011 User declares whether higher or lower performance values are better.</li>
 <li>P-012 App shows the link between EWMA and Banister without gains.</li>
-<li>P-013 First version assumes zero initial fitness and fatigue, documented as a limitation.</li>
+<li>P-013 Closed 2026-11-27: resolved by D-025.</li>
 <li>P-014 Ask T. Busso for the swimmers’ dataset.</li>
 </ul></div>
 </div>

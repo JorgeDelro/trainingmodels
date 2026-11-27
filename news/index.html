@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">trainingmodels</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,9 +30,18 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/JorgeDelro/trainingmodels/blob/v0.0.2/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/JorgeDelro/trainingmodels/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.0.3" id="trainingmodels-003">trainingmodels 0.0.3<a class="anchor" aria-label="anchor" href="#trainingmodels-003"></a></h2>
+<ul><li>New <code><a href="../reference/simulate_banister.html">simulate_banister()</a></code> simulates the Banister impulse-response model from a <code>daily_load</code> object and parameters given by the user: fitness, fatigue and predicted performance for every day, within each athlete. The fitness-only model is an option of the same function (DECISIONS.md, D-023). Both timing conventions are offered through <code>same_day_load</code>, with default <code>"exclude"</code> (D-012). Initial fitness and fatigue are 0 by default and can be set (D-025). Missing loads are an error unless <code>missing_load = "zero"</code> (D-016). The result prints its model, convention, parameters and half-lives (A-012).</li>
+<li>New <code><a href="../reference/session_response.html">session_response()</a></code> gives the effect of one session on the following days, <code>time_to_recover</code>, <code>time_to_peak</code> and <code>peak_effect</code>; new <code><a href="../reference/constant_training.html">constant_training()</a></code> gives the closed-form response to constant daily training, its asymptote and <code>time_of_minimum</code>. Times that do not exist are <code>NA</code> (D-026).</li>
+<li>New <code><a href="../reference/half_life.html">half_life()</a></code> and <code><a href="../reference/half_life.html">time_constant()</a></code> convert between time constants and half-lives (D-024).</li>
+<li>New article “The Banister model” reproduces the example of Morton et al.
+<ol start="1990" style="list-style-type: decimal"><li>and discusses the limitations of the model. Nothing is fitted in this version.</li>
+</ol></li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.0.2" id="trainingmodels-002">trainingmodels 0.0.2<a class="anchor" aria-label="anchor" href="#trainingmodels-002"></a></h2>
 <ul><li>New <code><a href="../reference/srpe_load.html">srpe_load()</a></code> computes session RPE load, RPE x duration (Foster 1998; Foster et al. 2001).</li>

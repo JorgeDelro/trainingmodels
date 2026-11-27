@@ -81,6 +81,22 @@ reason. Approved entries are decided by the author.
 - D-022 (2026-11-26) Monotony and strain: rolling 7-day window computed
   every day; rest days count as load 0; when all loads in the window are
   equal the standard deviation is 0 and monotony and strain are NA.
+- D-023 (2026-11-27) The fitness-only model (MODELS.md, M-03) is
+  included, as an option of the same simulation function as the
+  two-component model. Closes P-007.
+- D-024 (2026-11-27) Half-life (tau x ln 2) is shown in printed output
+  next to each time constant. Function arguments are always time
+  constants, never half-lives. Closes P-010.
+- D-025 (2026-11-27) Initial fitness and fatigue are 0 by default and
+  can be set by the user in simulation. Fitting (0.1.0) will keep them
+  fixed at 0 in its first version, documented as a limitation. Closes
+  P-013.
+- D-026 (2026-11-27) Characteristic times are named in words:
+  `time_to_recover` and `time_to_peak` (single session, M-05),
+  `time_of_minimum` (constant daily training, M-04). They are NA, with
+  the reason stated in the help, when they do not exist. No function or
+  argument is named `t_n`. Closes the naming question of MODELS.md,
+  M-05.
 
 ## Proposed (architecture, awaiting author approval)
 
@@ -105,6 +121,10 @@ reason. Approved entries are decided by the author.
   one internal validator, and returns a plain data frame with one row
   per row of the input, in the same order (athlete, date, load, then
   results).
+- A-012 Simulations return a data frame subclass with a print method
+  whose header shows the model, the timing convention (D-012), the
+  parameters and the half-lives. This is the one exception to “plain
+  data frame” in A-011.
 
 ## Pending (product and domain, author to decide)
 
@@ -117,14 +137,13 @@ reason. Approved entries are decided by the author.
 - P-005 Planned research use in the next six months (JOSS vs JOSE).
 - P-006 Closed 2026-11-24: Morton et al. (1990) was read and uses a
   different timing convention; resolved by D-011 and D-012.
-- P-007 Include the fitness-only model in the first version.
+- P-007 Closed 2026-11-27: resolved by D-023.
 - P-008 Every fit reports trivial comparators (mean, straight line).
 - P-009 Fit output foregrounds the response to a single session (curve,
   t_n, t_g) over individual parameters.
-- P-010 Show half-life alongside time constants.
+- P-010 Closed 2026-11-27: resolved by D-024.
 - P-011 User declares whether higher or lower performance values are
   better.
 - P-012 App shows the link between EWMA and Banister without gains.
-- P-013 First version assumes zero initial fitness and fatigue,
-  documented as a limitation.
+- P-013 Closed 2026-11-27: resolved by D-025.
 - P-014 Ask T. Busso for the swimmers’ dataset.

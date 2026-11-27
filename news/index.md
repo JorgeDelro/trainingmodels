@@ -1,5 +1,36 @@
 # Changelog
 
+## trainingmodels 0.0.3
+
+- New
+  [`simulate_banister()`](https://jorgedelro.github.io/trainingmodels/reference/simulate_banister.md)
+  simulates the Banister impulse-response model from a `daily_load`
+  object and parameters given by the user: fitness, fatigue and
+  predicted performance for every day, within each athlete. The
+  fitness-only model is an option of the same function (DECISIONS.md,
+  D-023). Both timing conventions are offered through `same_day_load`,
+  with default `"exclude"` (D-012). Initial fitness and fatigue are 0 by
+  default and can be set (D-025). Missing loads are an error unless
+  `missing_load = "zero"` (D-016). The result prints its model,
+  convention, parameters and half-lives (A-012).
+- New
+  [`session_response()`](https://jorgedelro.github.io/trainingmodels/reference/session_response.md)
+  gives the effect of one session on the following days,
+  `time_to_recover`, `time_to_peak` and `peak_effect`; new
+  [`constant_training()`](https://jorgedelro.github.io/trainingmodels/reference/constant_training.md)
+  gives the closed-form response to constant daily training, its
+  asymptote and `time_of_minimum`. Times that do not exist are `NA`
+  (D-026).
+- New
+  [`half_life()`](https://jorgedelro.github.io/trainingmodels/reference/half_life.md)
+  and
+  [`time_constant()`](https://jorgedelro.github.io/trainingmodels/reference/half_life.md)
+  convert between time constants and half-lives (D-024).
+- New article “The Banister model” reproduces the example of Morton et
+  al.
+  1990. and discusses the limitations of the model. Nothing is fitted in
+        this version.
+
 ## trainingmodels 0.0.2
 
 - New

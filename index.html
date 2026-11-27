@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="index.html">trainingmodels</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@
 <!-- badges: start -->
 
 <p><code>trainingmodels</code> provides mathematical models of training load and training response used in sport science. The package is <strong>experimental</strong>: its interface may still change.</p>
-<p>Version 0.0.2 contains:</p>
+<p>Version 0.0.3 contains:</p>
 <ul>
 <li>
 <code><a href="reference/as_daily_load.html">as_daily_load()</a></code>: builds a complete daily calendar of training load from session data, for one or several athletes;</li>
@@ -61,9 +61,15 @@
 <li>
 <code><a href="reference/rolling_load.html">rolling_load()</a></code>: rolling sum and mean of the daily load over a window;</li>
 <li>
-<code><a href="reference/monotony_strain.html">monotony_strain()</a></code>: Foster’s training monotony and strain over a rolling window.</li>
+<code><a href="reference/monotony_strain.html">monotony_strain()</a></code>: Foster’s training monotony and strain over a rolling window;</li>
+<li>
+<code><a href="reference/simulate_banister.html">simulate_banister()</a></code>: simulation of the Banister impulse-response model (two-component or fitness-only) from parameters given by the user;</li>
+<li>
+<code><a href="reference/session_response.html">session_response()</a></code> and <code><a href="reference/constant_training.html">constant_training()</a></code>: response to a single session and to constant daily training;</li>
+<li>
+<code><a href="reference/half_life.html">half_life()</a></code> and <code><a href="reference/half_life.html">time_constant()</a></code>: conversion between time constants and half-lives.</li>
 </ul>
-<p>Impulse-response models (starting with the Banister model) are not implemented yet. Acute:chronic workload ratios and EWMA-based loads are in the <a href="https://CRAN.R-project.org/package=ACWR" class="external-link">ACWR</a> package, not here.</p>
+<p>The Banister model is simulated, not fitted: estimating its parameters from data is planned for version 0.1.0. Acute:chronic workload ratios and EWMA-based loads are in the <a href="https://CRAN.R-project.org/package=ACWR" class="external-link">ACWR</a> package, not here.</p>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
@@ -75,13 +81,25 @@
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_daily_load.html">as_daily_load</a></span><span class="op">(</span><span class="va">week</span>, date <span class="op">=</span> <span class="st">"date"</span>, load <span class="op">=</span> <span class="st">"load"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/monotony_strain.html">monotony_strain</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></code></pre></div>
 <p>On the seventh day the weekly load is 3725, the monotony 1.45 and the strain 5397.</p>
+<p>The example of Morton et al. (1990): load 100 every day for 60 days, then rest.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_daily_load.html">as_daily_load</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2026-01-01"</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0</span><span class="op">:</span><span class="fl">119</span>,</span>
+<span>             load <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">60</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">60</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  date <span class="op">=</span> <span class="st">"date"</span>, load <span class="op">=</span> <span class="st">"load"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/simulate_banister.html">simulate_banister</a></span><span class="op">(</span><span class="va">x</span>, k1 <span class="op">=</span> <span class="fl">1</span>, tau1 <span class="op">=</span> <span class="fl">45</span>, k2 <span class="op">=</span> <span class="fl">2</span>, tau2 <span class="op">=</span> <span class="fl">15</span>,</span>
+<span>                         same_day_load <span class="op">=</span> <span class="st">"include"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.min</a></span><span class="op">(</span><span class="va">sim</span><span class="op">$</span><span class="va">predicted</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/session_response.html">session_response</a></span><span class="op">(</span>k1 <span class="op">=</span> <span class="fl">1</span>, tau1 <span class="op">=</span> <span class="fl">45</span>, k2 <span class="op">=</span> <span class="fl">2</span>, tau2 <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span></code></pre></div>
+<p>Predicted performance is lowest on day 16; one session lowers performance for about 16 days and raises it most after about 40 days.</p>
 <p>Design decisions are recorded in <a href="DECISIONS.html">DECISIONS.md</a>, formulas and their verification in <a href="MODELS.html">MODELS.md</a>, and the use of AI assistance is disclosed in <a href="AI_USAGE.html">AI_USAGE.md</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>The development version can be installed with:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
 <span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"JorgeDelro/trainingmodels"</span><span class="op">)</span></span></code></pre></div>
 </div>

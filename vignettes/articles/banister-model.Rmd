@@ -1,0 +1,252 @@
+---
+title: "The Banister model"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4
+)
+```
+
+```{r setup}
+library(trainingmodels)
+```
+
+This version of the package simulates the Banister impulse-response model
+from parameters given by the user. It does not estimate parameters from data.
+
+## Theory
+
+**Fitness and fatigue as exponential filters** (MODELS.md, M-01). Each day
+$t$ has one training load $w(t)$, the sum of its sessions. A component with
+time constant $\tau$ (in days) accumulates the loads and forgets them
+exponentially. The literature uses two discrete forms, and the package
+offers both through the argument `same_day_load`:
+
+* **"exclude"** (the default): the load of day $t$ affects performance from
+  day $t + 1$, as in the R script of Busso & Chalencon (2023),
+  $$
+  g(t) = \sum_{s=1}^{t-1} w(s)\,e^{-(t-s)/\tau}
+  = \left[g(t-1) + w(t-1)\right] e^{-1/\tau}.
+  $$
+  It corresponds to a performance test done before that day's training.
+* **"include"**: the load of day $t$ counts on day $t$ at full weight, as in
+  Morton, Fitz-Clarke & Banister (1990, Eqs. 4-5),
+  $$
+  g(t) = \sum_{s=1}^{t} w(s)\,e^{-(t-s)/\tau} = g(t-1)\,e^{-1/\tau} + w(t).
+  $$
+
+The two forms are related by $g_{\mathrm{inc}}(t) = g_{\mathrm{exc}}(t) +
+w(t)$. They are not equivalent: the same parameters give different numbers.
+The load descriptors of the package, such as `rolling_load()`, default to
+"include"; the impulse-response models default to "exclude".
+
+The **half-life** of a component, $\tau \ln 2$, is the number of days it
+takes to fall to half. Functions take time constants; printed output shows
+the half-life next to each one (`half_life()`, `time_constant()`).
+
+The **initial state** $g(0) = g_0$ is 0 by default and can be set by the
+user. Under both conventions it adds $g_0\,e^{-t/\tau}$ to day $t$.
+
+**Two-component model** (MODELS.md, M-02; Morton et al. 1990). Fitness $g$
+(time constant $\tau_1$) and fatigue $h$ (time constant $\tau_2$) are two
+filters of the same loads, and predicted performance is
+
+$$
+p(t) = p_0 + k_1\,g(t) - k_2\,h(t),
+$$
+
+with baseline $p_0$ and gains $k_1$, $k_2$. Fatigue usually has the larger
+gain and the shorter time constant: training lowers performance at first and
+raises it later.
+
+**Fitness-only model** (MODELS.md, M-03; as printed in Marchal et al. 2025).
+Without the fatigue component,
+
+$$
+p(t) = p_0 + k_1\,g(t).
+$$
+
+**Response to a single session** (MODELS.md, M-05). The effect on
+performance $u$ days after one unit of load is
+
+$$
+L(u) = k_1\,e^{-u/\tau_1} - k_2\,e^{-u/\tau_2}.
+$$
+
+When $\tau_1 > \tau_2$ and $k_2 > k_1$ the effect is negative at first, turns
+positive after `time_to_recover` days and is largest after `time_to_peak`
+days (Clarke & Skiba 2013; Busso & Chalencon 2023, Eqs. 12-13):
+
+$$
+\text{time\_to\_recover} = \frac{\tau_1 \tau_2}{\tau_1 - \tau_2}
+\ln\frac{k_2}{k_1},
+\qquad
+\text{time\_to\_peak} = \frac{\tau_1 \tau_2}{\tau_1 - \tau_2}
+\ln\frac{k_2\,\tau_1}{k_1\,\tau_2}.
+$$
+
+These times do not depend on the timing convention; only the effect on the
+day of the session does ($k_1 - k_2$ under "include", 0 under "exclude").
+They are `NA` when they do not exist: `time_to_recover` when
+$k_2 \le k_1$, `time_to_peak` when $k_2 \tau_1 \le k_1 \tau_2$, and both when
+$k_1 = 0$, when $\tau_1 \le \tau_2$ or for the fitness-only model. In Busso
+& Chalencon (2023), alternative parameter sets with a similar fit gave
+small, although statistically significant, differences in the response to a
+session; the authors recommend characterising an athlete by that response
+rather than by each parameter taken individually.
+
+## Computation
+
+### Morton's example
+
+Morton et al. (1990, Figs. 3-4) train at a load of 100 every day for 60
+days and then stop, with $k_1 = 1$, $k_2 = 2$, $\tau_1 = 45$ and
+$\tau_2 = 15$, no baseline and the convention "include".
+
+```{r}
+x <- as_daily_load(
+  data.frame(date = as.Date("2026-01-01") + 0:119,
+             load = c(rep(100, 60), rep(0, 60))),
+  date = "date", load = "load"
+)
+inc <- simulate_banister(x, k1 = 1, tau1 = 45, k2 = 2, tau2 = 15,
+                         same_day_load = "include")
+inc
+```
+
+The values agree with the published ones (MODELS.md, M-02):
+
+```{r}
+p <- inc$predicted
+data.frame(
+  quantity = c("k1 g(60)", "k2 h(60)", "Day of minimum",
+               "p(47)", "p(48)", "Day of peak after stopping",
+               "Peak after stopping"),
+  published = c("3,351", "3,044", "16", "about day 47", "",
+                "83", "about 1,353"),
+  package = c(inc$fitness[60], 2 * inc$fatigue[60], which.min(p),
+              p[47], p[48], 60 + which.max(p[61:120]), max(p[61:120]))
+)
+```
+
+Performance falls during the first 16 days, returns to baseline between
+days 47 and 48, and peaks 23 days after training stops. Under the default
+convention "exclude" the curve is shifted: each day misses its own load.
+
+```{r}
+exc <- simulate_banister(x, k1 = 1, tau1 = 45, k2 = 2, tau2 = 15)
+c(include = inc$predicted[60], exclude = exc$predicted[60])
+```
+
+```{r morton-plot, echo = FALSE, fig.alt = "Predicted performance over 120 days under the two timing conventions. Both fall to a minimum on day 16, rise during training, and peak on day 83, 23 days after training stops on day 60."}
+op <- par(mar = c(4, 4, 2, 1), las = 1, bty = "n", col.axis = "grey30",
+          col.lab = "grey30", fg = "grey60")
+plot(seq_along(p), inc$predicted, type = "n",
+     ylim = range(inc$predicted, exc$predicted),
+     xlab = "Day", ylab = "Predicted performance",
+     main = "Morton's example: 60 days of training, then rest",
+     font.main = 1, cex.main = 1)
+abline(h = 0, col = "grey80")
+abline(v = 60, col = "grey80", lty = 3)
+lines(seq_along(p), inc$predicted, col = "#2a78d6", lwd = 2)
+lines(seq_along(p), exc$predicted, col = "#eb6834", lwd = 2)
+legend("topleft", legend = c("include", "exclude"),
+       col = c("#2a78d6", "#eb6834"), lwd = 2, bty = "n")
+par(op)
+```
+
+`constant_training()` gives the same curve in closed form, the asymptote of
+performance if training never stops, and the day of poorest performance.
+The asymptote depends on the convention; the day of the minimum does not.
+
+```{r}
+constant_training(100, k1 = 1, tau1 = 45, k2 = 2, tau2 = 15,
+                  same_day_load = "include")
+constant_training(100, k1 = 1, tau1 = 45, k2 = 2, tau2 = 15)$asymptote
+```
+
+### Response to a single session
+
+With Morton's parameters, one session lowers performance for about 16 days
+and raises it most after about 40 days:
+
+```{r}
+r <- session_response(k1 = 1, tau1 = 45, k2 = 2, tau2 = 15, days = 100)
+r
+```
+
+```{r session-plot, echo = FALSE, fig.alt = "Effect of one unit of load on predicted performance over 100 days. It is negative until day 15.6 and largest on day 40.3."}
+op <- par(mar = c(4, 4, 2, 1), las = 1, bty = "n", col.axis = "grey30",
+          col.lab = "grey30", fg = "grey60")
+plot(r$curve$day, r$curve$effect, type = "n",
+     ylim = c(min(r$curve$effect), 2 * r$peak_effect),
+     xlab = "Days after the session", ylab = "Effect per unit of load",
+     main = "Response to one session (convention \"exclude\")",
+     font.main = 1, cex.main = 1)
+abline(h = 0, col = "grey80")
+lines(r$curve$day, r$curve$effect, col = "#2a78d6", lwd = 2)
+points(c(r$time_to_recover, r$time_to_peak), c(0, r$peak_effect),
+       pch = 21, bg = "#2a78d6", col = "white", cex = 1.4)
+text(r$time_to_recover, 0, "time_to_recover", pos = 1, col = "grey20")
+text(r$time_to_peak, r$peak_effect, "time_to_peak", pos = 3, col = "grey20")
+par(op)
+```
+
+The fit of Clarke & Skiba (2013, Fig. 8B) gives times of about 12 and 40
+days:
+
+```{r}
+session_response(k1 = 0.18258, tau1 = 35.821, k2 = 0.23016, tau2 = 21.340)
+```
+
+## Limitations
+
+* Parameters are strongly correlated and several parameter sets fit the
+  same data almost equally well (Busso & Chalencon 2023; Vermeire et al.
+  2022).
+* Estimates from local optimisers depend on the starting values (Vermeire et
+  al. 2022).
+* Adding the fatigue component improved fit but not prediction in two
+  datasets (Marchal et al. 2025).
+* With 56 to 104 performance tests per swimmer, the mean $R^2$ of the model
+  was 0.29, and the mean absolute percentage error of its predictions was
+  2.0% and 2.7% in two validation sets (Busso & Chalencon 2023).
+* The positive effect is linear in training load. The model therefore
+  cannot represent maladaptation to overtraining, and an optimal training
+  load before a taper cannot be searched with it (Busso & Chalencon 2023).
+  Optimising the model without constraints gives maximal training followed
+  by rest (Ceddia et al. 2025, preprint).
+* Training is reduced to one number per day, parameters are constant in
+  time, and the initial state is assumed.
+* The two timing conventions give different numbers; gains obtained under
+  one are not comparable with the other.
+* This version only simulates: it does not estimate parameters from data.
+
+## References
+
+Busso T, Chalencon S (2023). Validity and accuracy of impulse-response
+models for modeling and predicting training effects on performance of
+swimmers. *Medicine & Science in Sports & Exercise*, 55(7), 1274-1285.
+
+Ceddia D, Bondell H, Taylor P (2025). Mathematical modelling and
+optimisation of athletic performance: tapering and periodisation.
+arXiv:2505.20859 (preprint).
+
+Clarke DC, Skiba PF (2013). Rationale and resources for teaching the
+mathematical modeling of athletic training and performance. *Advances in
+Physiology Education*, 37, 134-152.
+
+Marchal A, Benazieb O, Weldegebriel Y, Méline T, Imbach F (2025).
+Statistical flaws of the fitness-fatigue sports performance prediction
+model. *Scientific Reports*, 15, 3706.
+
+Morton RH, Fitz-Clarke JR, Banister EW (1990). Modeling human performance
+in running. *Journal of Applied Physiology*, 69(3), 1171-1177.
+
+Vermeire K, Ghijs M, Bourgois JG, Boone J (2022). The fitness-fatigue model:
+what's in the numbers? *International Journal of Sports Physiology and
+Performance*, 17, 810-813.

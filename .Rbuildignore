@@ -10,3 +10,5 @@
 ^CONTRIBUTING\.md$
 ^MODELS\.md$
 ^vignettes/articles$
+^.*\.Rproj$
+^\.Rproj\.user$

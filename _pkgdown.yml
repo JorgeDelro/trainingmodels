@@ -15,6 +15,16 @@ reference:
   - srpe_load
   - rolling_load
   - monotony_strain
+- title: Impulse-response models
+  desc: >
+    Simulation of the Banister model (two-component and fitness-only), the
+    response to a single session and to constant daily training.
+  contents:
+  - simulate_banister
+  - print.banister_sim
+  - session_response
+  - constant_training
+  - half_life
 
 # Articles: one article per method (DECISIONS.md, D-006).
 articles:
@@ -22,3 +32,4 @@ articles:
   desc: Theory, computation and limitations of each method.
   contents:
   - articles/monotony-strain
+  - articles/banister-model

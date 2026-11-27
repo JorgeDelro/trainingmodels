@@ -575,7 +575,7 @@ test_that("print() shows the model, convention, parameters and half-lives", {
   expect_match(text, "half-life")
   expect_match(text, "31.19", fixed = TRUE)
   expect_match(text, "10.4", fixed = TRUE)
-  expect_invisible(print(out))
+  capture.output(expect_invisible(print(out)))
 
   inc <- simulate_banister(x, k1 = 1, tau1 = 45, model = "fitness_only",
                            same_day_load = "include")
